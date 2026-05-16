@@ -3,7 +3,7 @@ import Login from "../views/Login";
 import Register from "../views/Register";
 import Settings from "../views/Settings";
 import Home from "../views/Home";
-import Formulario from "./views/Formulario";
+import Formulario from "../views/Formulario";
 
 function AppRoutes() {
   return (

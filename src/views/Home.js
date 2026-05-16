@@ -4,6 +4,11 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import {
+  getCurrentUser,
+  getUserData,
+  saveUserData,
+} from "../services/storageService";
 import "./Home.css";
 
 export default function Home() {
@@ -17,9 +22,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   const carregarHistorico = () => {
-    const fraldas = JSON.parse(localStorage.getItem("fraldas")) || [];
-    const sono = JSON.parse(localStorage.getItem("sono")) || [];
-    const amamentacao = JSON.parse(localStorage.getItem("amamentacao")) || [];
+    const fraldas = getUserData("fraldas") || [];
+    const sono = getUserData("sono") || [];
+    const amamentacao = getUserData("amamentacao") || [];
 
     const allData = [
       ...fraldas.map((item) => ({
@@ -49,7 +54,7 @@ export default function Home() {
   };
 
   const carregarInformacoesBebe = () => {
-    const informacoes = JSON.parse(localStorage.getItem("informacoesBebe")) || {
+    const informacoes = getUserData("informacoesBebe") || {
       nomeBebe: "",
       pesoBebe: "",
       comprimentoBebe: "",
@@ -63,23 +68,23 @@ export default function Home() {
 
   const excluirRegistro = (type, registroData) => {
     if (type === "Fralda") {
-      const fraldas = JSON.parse(localStorage.getItem("fraldas")) || [];
+      const fraldas = getUserData("fraldas") || [];
       const updatedFraldas = fraldas.filter(
         (item) => item.registroData !== registroData
       );
-      localStorage.setItem("fraldas", JSON.stringify(updatedFraldas));
+      saveUserData("fraldas", updatedFraldas);
     } else if (type === "Sono") {
-      const sono = JSON.parse(localStorage.getItem("sono")) || [];
+      const sono = getUserData("sono") || [];
       const updatedSono = sono.filter(
         (item) => item.registroData !== registroData
       );
-      localStorage.setItem("sono", JSON.stringify(updatedSono));
+      saveUserData("sono", updatedSono);
     } else if (type === "Amamentação") {
-      const amamentacao = JSON.parse(localStorage.getItem("amamentacao")) || [];
+      const amamentacao = getUserData("amamentacao") || [];
       const updatedAmamentacao = amamentacao.filter(
         (item) => item.registroData !== registroData
       );
-      localStorage.setItem("amamentacao", JSON.stringify(updatedAmamentacao));
+      saveUserData("amamentacao", updatedAmamentacao);
     }
     carregarHistorico();
   };
@@ -89,6 +94,12 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      navigate("/");
+      return;
+    }
+
     carregarHistorico();
     carregarInformacoesBebe();
 
@@ -100,7 +111,7 @@ export default function Home() {
     window.addEventListener("storage", handleStorageChange);
 
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="home-container" style={{ backgroundColor: "#f4f6f8" }}>

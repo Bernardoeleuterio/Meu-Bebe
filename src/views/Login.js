@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData } from "../services/storageService";
+import { getGlobalData } from "../services/storageService";
 import {
   Container,
   TextField,
@@ -18,7 +18,7 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const users = getData("users") || [];
+    const users = getGlobalData("users") || [];
     const userExists = users.find(
       (user) => user.nome === nome && user.senha === senha
     );

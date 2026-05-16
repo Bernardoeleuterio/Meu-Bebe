@@ -1,20 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { getUserData, saveUserData, getCurrentUser } from "../services/storageService";
 
 export default function FraldaForm() {
   const [status, setStatus] = useState("Limpa");
   const [horario, setHorario] = useState("");
   const [observacao, setObservacao] = useState("");
 
-  useEffect(() => {
-    const fraldas = JSON.parse(localStorage.getItem("fraldas")) || [];
-    const novaFralda = { status, horario, observacao };
-    localStorage.setItem("fraldas", JSON.stringify([...fraldas, novaFralda]));
-  }, [status, horario, observacao]);
+  const handleSalvar = (event) => {
+    event.preventDefault();
+
+    if (!getCurrentUser()) {
+      alert("Faça login antes de salvar uma fralda.");
+      return;
+    }
+
+    const fraldas = getUserData("fraldas") || [];
+    const novaFralda = {
+      status,
+      horario,
+      observacao,
+      registroData: new Date().toISOString(),
+    };
+
+    saveUserData("fraldas", [novaFralda, ...fraldas]);
+    alert("Registro de fralda salvo com sucesso!");
+    setStatus("Limpa");
+    setHorario("");
+    setObservacao("");
+  };
 
   return (
-    <div>
+    <form onSubmit={handleSalvar}>
       <label>Status da Fralda</label>
-      <select onChange={(e) => setStatus(e.target.value)}>
+      <select value={status} onChange={(e) => setStatus(e.target.value)}>
         <option>Limpa</option>
         <option>Suja de Urina</option>
         <option>Suja de Fezes</option>
@@ -31,6 +49,7 @@ export default function FraldaForm() {
         value={observacao}
         onChange={(e) => setObservacao(e.target.value)}
       />
-    </div>
+      <button type="submit">Salvar Fralda</button>
+    </form>
   );
 }

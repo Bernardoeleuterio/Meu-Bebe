@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getData, saveData } from "../services/storageService";
+import {
+  getCurrentUser,
+  getUserData,
+  saveUserData,
+} from "../services/storageService";
 import {
   Container,
   TextField,
@@ -22,18 +26,24 @@ export default function Settings() {
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const data = getData("informacoesBebe") || {};
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      navigate("/");
+      return;
+    }
+
+    const data = getUserData("informacoesBebe") || {};
     setBabyData({
       nomeBebe: data.nomeBebe || "",
       pesoBebe: data.pesoBebe || "",
       comprimentoBebe: data.comprimentoBebe || "",
     });
-  }, []);
+  }, [navigate]);
 
   const handleEdit = () => setIsEditing(true);
 
   const handleSave = () => {
-    saveData("informacoesBebe", babyData);
+    saveUserData("informacoesBebe", babyData);
     alert("Configurações salvas com sucesso!");
     setIsEditing(false);
     navigate("/home");

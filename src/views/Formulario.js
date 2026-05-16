@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Container,
   TextField,
@@ -9,6 +9,11 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import {
+  getCurrentUser,
+  getUserData,
+  saveUserData,
+} from "../services/storageService";
 import "./Formulario.css";
 
 export default function FormularioRegistro() {
@@ -19,11 +24,60 @@ export default function FormularioRegistro() {
   const [observacao, setObservacao] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [lado, setLado] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [registroDataId, setRegistroDataId] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      navigate("/");
+      return;
+    }
+
+    if (location.state?.type && location.state?.registroData) {
+      const { type, registroData } = location.state;
+      const storageKey =
+        type === "Fralda"
+          ? "fraldas"
+          : type === "Sono"
+          ? "sono"
+          : "amamentacao";
+      const registros = getUserData(storageKey) || [];
+      const registro = registros.find((item) => item.registroData === registroData);
+
+      if (registro) {
+        setTipo(type);
+        setEstado(registro.estado || "");
+        setHorarioInicio(registro.horarioInicio || "");
+        setHorarioFim(registro.horarioFim || "");
+        setObservacao(registro.observacao || "");
+        setQuantidade(registro.quantidade || "");
+        setLado(registro.lado || "");
+        setIsEditing(true);
+        setRegistroDataId(registroData);
+      } else {
+        alert("Registro não encontrado para edição.");
+        navigate("/home");
+      }
+    }
+  }, [location.state, navigate]);
 
   const handleSalvar = () => {
-    const horario = new Date().toLocaleTimeString();
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      navigate("/");
+      return;
+    }
+
+    if (!tipo) {
+      alert("Selecione um tipo de registro.");
+      return;
+    }
+
+    const registroData = registroDataId || new Date().toISOString();
     const novoRegistro = {
       tipo,
       estado,
@@ -32,23 +86,25 @@ export default function FormularioRegistro() {
       observacao,
       quantidade,
       lado,
-      horario,
-      registroData: new Date().toISOString(),
+      registroData,
+      horario: new Date().toLocaleTimeString(),
     };
 
-    if (tipo === "Fralda") {
-      const fraldas = JSON.parse(localStorage.getItem("fraldas")) || [];
-      fraldas.unshift(novoRegistro);
-      localStorage.setItem("fraldas", JSON.stringify(fraldas));
-    } else if (tipo === "Sono") {
-      const sono = JSON.parse(localStorage.getItem("sono")) || [];
-      sono.unshift(novoRegistro);
-      localStorage.setItem("sono", JSON.stringify(sono));
-    } else if (tipo === "Amamentação") {
-      const amamentacao = JSON.parse(localStorage.getItem("amamentacao")) || [];
-      amamentacao.unshift(novoRegistro);
-      localStorage.setItem("amamentacao", JSON.stringify(amamentacao));
-    }
+    const storageKey =
+      tipo === "Fralda"
+        ? "fraldas"
+        : tipo === "Sono"
+        ? "sono"
+        : "amamentacao";
+
+    const registros = getUserData(storageKey) || [];
+    const updatedRegistros = isEditing
+      ? registros.map((item) =>
+          item.registroData === registroData ? novoRegistro : item
+        )
+      : [novoRegistro, ...registros];
+
+    saveUserData(storageKey, updatedRegistros);
 
     alert("Registro salvo com sucesso!");
     navigate("/home");
@@ -65,7 +121,7 @@ export default function FormularioRegistro() {
       }}
     >
       <Typography variant="h4" align="center" gutterBottom color="#4caf50">
-        Novo Registro
+        {isEditing ? "Editar Registro" : "Novo Registro"}
       </Typography>
       <Box
         component="form"
@@ -76,6 +132,7 @@ export default function FormularioRegistro() {
           value={tipo}
           onChange={(e) => setTipo(e.target.value)}
           sx={{ backgroundColor: "#ffffff" }}
+          disabled={isEditing}
         >
           <MenuItem value="Fralda">Fralda</MenuItem>
           <MenuItem value="Sono">Sono</MenuItem>

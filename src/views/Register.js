@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveData, getData } from "../services/storageService";
+import { saveGlobalData, getGlobalData } from "../services/storageService";
 import {
   Container,
   TextField,
@@ -18,21 +18,24 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (nome && senha) {
-      const users = getData("users") || [];
-      const newUser = { nome, senha };
-
-      saveData("users", [...users, newUser]);
-
-      saveData("fraldas", []);
-      saveData("sono", []);
-      saveData("amamentacao", []);
-
-      alert("Conta criada com sucesso!");
-      navigate("/");
-    } else {
+    if (!nome || !senha) {
       alert("Por favor, preencha todos os campos.");
+      return;
     }
+
+    const users = getGlobalData("users") || [];
+    const userExists = users.some((user) => user.nome === nome);
+
+    if (userExists) {
+      alert("Este nome de usuário já existe. Escolha outro.");
+      return;
+    }
+
+    const newUser = { nome, senha };
+    saveGlobalData("users", [...users, newUser]);
+
+    alert("Conta criada com sucesso!");
+    navigate("/");
   };
 
   const redirectToLogin = () => {

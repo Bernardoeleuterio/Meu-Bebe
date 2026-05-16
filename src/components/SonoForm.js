@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { saveData, getData } from "../services/storageService";
+import { useState } from "react";
+import { getCurrentUser, getUserData, saveUserData } from "../services/storageService";
 
 export default function SonoForm() {
   const [inicio, setInicio] = useState("");
@@ -7,10 +7,20 @@ export default function SonoForm() {
   const [observacao, setObservacao] = useState("");
 
   const handleSubmit = () => {
-    const sonos = getData("sono") || [];
-    const novoSono = { inicio, fim, observacao };
+    if (!getCurrentUser()) {
+      alert("Faça login antes de adicionar um registro de sono.");
+      return;
+    }
 
-    saveData("sono", [...sonos, novoSono]);
+    const sonos = getUserData("sono") || [];
+    const novoSono = {
+      inicio,
+      fim,
+      observacao,
+      registroData: new Date().toISOString(),
+    };
+
+    saveUserData("sono", [...sonos, novoSono]);
     alert("Sono adicionado com sucesso!");
   };
 

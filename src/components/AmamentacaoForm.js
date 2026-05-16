@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { saveData, getData } from "../services/storageService";
+import { useState } from "react";
+import { getCurrentUser, getUserData, saveUserData } from "../services/storageService";
 
 export default function AmamentacaoForm() {
   const [horario, setHorario] = useState("");
@@ -7,10 +7,20 @@ export default function AmamentacaoForm() {
   const [observacao, setObservacao] = useState("");
 
   const handleSubmit = () => {
-    const amamentacao = getData("amamentacao") || [];
-    const novoRegistro = { horario, lado, observacao };
+    if (!getCurrentUser()) {
+      alert("Faça login antes de adicionar um registro de amamentação.");
+      return;
+    }
 
-    saveData("amamentacao", [...amamentacao, novoRegistro]);
+    const amamentacao = getUserData("amamentacao") || [];
+    const novoRegistro = {
+      horario,
+      lado,
+      observacao,
+      registroData: new Date().toISOString(),
+    };
+
+    saveUserData("amamentacao", [...amamentacao, novoRegistro]);
     alert("Amamentação adicionada!");
   };
 
