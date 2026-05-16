@@ -5,15 +5,16 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-scripts": "^5.0.0",
-    "react-router-dom": "7.0.2",
-    "@mui/material": "6.1.10",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.0",
+    "@mui/material": "6.1.10",
+    "ajv": "^8.20.0",
     "i18next": "24.0.5",
-    "react-i18next": "15.1.4"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "15.1.4",
+    "react-router-dom": "7.0.2",
+    "react-scripts": "^5.0.0"
   },
   "devDependencies": {
     "@types/react": "19.0.0",

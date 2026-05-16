@@ -14,6 +14,7 @@ import {
   getUserData,
   saveUserData,
 } from "../services/storageService";
+import CustomAppBar from "../components/AppBar";
 import "./Formulario.css";
 
 export default function FormularioRegistro() {
@@ -112,134 +113,160 @@ export default function FormularioRegistro() {
 
   return (
     <Container
+      className="formulario-page"
       maxWidth="sm"
       sx={{
-        mt: 5,
-        backgroundColor: "#e8f5e9",
-        borderRadius: "12px",
-        padding: "20px",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        px: 2,
+        py: 4,
       }}
     >
-      <Typography variant="h4" align="center" gutterBottom color="#4caf50">
-        {isEditing ? "Editar Registro" : "Novo Registro"}
-      </Typography>
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <Select
-          fullWidth
-          value={tipo}
-          onChange={(e) => setTipo(e.target.value)}
-          sx={{ backgroundColor: "#ffffff" }}
-          disabled={isEditing}
-        >
-          <MenuItem value="Fralda">Fralda</MenuItem>
-          <MenuItem value="Sono">Sono</MenuItem>
-          <MenuItem value="Amamentação">Amamentação</MenuItem>
-        </Select>
+      <Box className="formulario-card">
+        <CustomAppBar title={isEditing ? "Editar Registro" : "Novo Registro"} showSettings={false} showBack={true} />
 
-        {tipo === "Fralda" && (
+        <Box className="formulario-hero">
+          <Typography variant="h5" align="center" sx={{ fontWeight: 700 }} gutterBottom>
+            {isEditing ? "Editar registro existente" : "Crie um novo registro"}
+          </Typography>
+          <Typography variant="body1" align="center" sx={{ color: "#475569" }}>
+            Use este formulário para manter o histórico do bebê sempre atualizado.
+          </Typography>
+        </Box>
+
+        <Box
+          component="form"
+          sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}
+        >
           <Select
             fullWidth
-            value={estado}
-            onChange={(e) => setEstado(e.target.value)}
-            sx={{ backgroundColor: "#ffffff" }}
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            sx={{ backgroundColor: "#f8fafc" }}
+            disabled={isEditing}
           >
-            <MenuItem value="">Selecione</MenuItem>
-            <MenuItem value="Limpa">Limpa</MenuItem>
-            <MenuItem value="Suja de Urina">Suja de Urina</MenuItem>
-            <MenuItem value="Suja de Fezes">Suja de Fezes</MenuItem>
-            <MenuItem value="Ambas">Ambas</MenuItem>
+            <MenuItem value="Fralda">Fralda</MenuItem>
+            <MenuItem value="Sono">Sono</MenuItem>
+            <MenuItem value="Amamentação">Amamentação</MenuItem>
           </Select>
-        )}
 
-        {tipo === "Sono" && (
-          <>
-            <TextField
-              fullWidth
-              type="time"
-              label="Horário de Início"
-              value={horarioInicio}
-              onChange={(e) => setHorarioInicio(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{ backgroundColor: "#ffffff" }}
-            />
-            <TextField
-              fullWidth
-              type="time"
-              label="Horário de Fim"
-              value={horarioFim}
-              onChange={(e) => setHorarioFim(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{ backgroundColor: "#ffffff" }}
-            />
-          </>
-        )}
-
-        {tipo === "Amamentação" && (
-          <>
-            <TextField
-              fullWidth
-              type="time"
-              label="Horário de Início"
-              value={horarioInicio}
-              onChange={(e) => setHorarioInicio(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{ backgroundColor: "#ffffff" }}
-            />
-            <TextField
-              fullWidth
-              type="time"
-              label="Horário de Fim"
-              value={horarioFim}
-              onChange={(e) => setHorarioFim(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              sx={{ backgroundColor: "#ffffff" }}
-            />
+          {tipo === "Fralda" && (
             <Select
               fullWidth
-              value={lado}
-              onChange={(e) => setLado(e.target.value)}
-              sx={{ backgroundColor: "#ffffff" }}
+              value={estado}
+              onChange={(e) => setEstado(e.target.value)}
+              sx={{ backgroundColor: "#f8fafc" }}
             >
               <MenuItem value="">Selecione</MenuItem>
-              <MenuItem value="Direito">Seio Direito</MenuItem>
-              <MenuItem value="Esquerdo">Seio Esquerdo</MenuItem>
-              <MenuItem value="Ambos">Ambos</MenuItem>
+              <MenuItem value="Limpa">Limpa</MenuItem>
+              <MenuItem value="Suja de Urina">Suja de Urina</MenuItem>
+              <MenuItem value="Suja de Fezes">Suja de Fezes</MenuItem>
+              <MenuItem value="Ambas">Ambas</MenuItem>
             </Select>
-          </>
-        )}
+          )}
 
-        <TextField
-          fullWidth
-          label="Observação"
-          multiline
-          rows={4}
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          sx={{ backgroundColor: "#ffffff" }}
-        />
+          {tipo === "Sono" && (
+            <Box className="formulario-row">
+              <TextField
+                fullWidth
+                type="time"
+                label="Início"
+                value={horarioInicio}
+                onChange={(e) => setHorarioInicio(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{ backgroundColor: "#f8fafc" }}
+              />
+              <TextField
+                fullWidth
+                type="time"
+                label="Fim"
+                value={horarioFim}
+                onChange={(e) => setHorarioFim(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                sx={{ backgroundColor: "#f8fafc" }}
+              />
+            </Box>
+          )}
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button
-            variant="contained"
-            onClick={handleSalvar}
-            sx={{
-              backgroundColor: "#4caf50",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
-          >
-            Salvar
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => navigate("/home")}
-            sx={{ color: "#4caf50", borderColor: "#4caf50" }}
-          >
-            Voltar para Home
-          </Button>
+          {tipo === "Amamentação" && (
+            <>
+              <Box className="formulario-row">
+                <TextField
+                  fullWidth
+                  type="time"
+                  label="Início"
+                  value={horarioInicio}
+                  onChange={(e) => setHorarioInicio(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ backgroundColor: "#f8fafc" }}
+                />
+                <TextField
+                  fullWidth
+                  type="time"
+                  label="Fim"
+                  value={horarioFim}
+                  onChange={(e) => setHorarioFim(e.target.value)}
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ backgroundColor: "#f8fafc" }}
+                />
+              </Box>
+              <Select
+                fullWidth
+                value={lado}
+                onChange={(e) => setLado(e.target.value)}
+                sx={{ backgroundColor: "#f8fafc" }}
+              >
+                <MenuItem value="">Selecione</MenuItem>
+                <MenuItem value="Direito">Seio Direito</MenuItem>
+                <MenuItem value="Esquerdo">Seio Esquerdo</MenuItem>
+                <MenuItem value="Ambos">Ambos</MenuItem>
+              </Select>
+            </>
+          )}
+
+          <TextField
+            fullWidth
+            label="Observação"
+            multiline
+            rows={4}
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            sx={{ backgroundColor: "#f8fafc" }}
+          />
+
+          <Box className="formulario-button-group">
+            <Button
+              variant="contained"
+              onClick={handleSalvar}
+              sx={{
+                backgroundColor: "#22c55e",
+                color: "#fff",
+                fontWeight: "bold",
+                px: 4,
+                py: 1.5,
+                borderRadius: 3,
+              }}
+            >
+              Salvar
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/home")}
+              sx={{
+                color: "#0f766e",
+                borderColor: "#0f766e",
+                px: 4,
+                py: 1.5,
+                borderRadius: 3,
+                fontWeight: 700,
+                "&:hover": { bgcolor: "rgba(15, 118, 110, 0.08)" },
+              }}
+            >
+              Voltar para Home
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Container>

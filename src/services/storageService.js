@@ -11,6 +11,14 @@ export const getCurrentUser = () => {
   return localStorage.getItem("loggedUser");
 };
 
+export const setCurrentUser = (user) => {
+  localStorage.setItem("loggedUser", user);
+};
+
+export const clearCurrentUser = () => {
+  localStorage.removeItem("loggedUser");
+};
+
 export const getUserKey = (key) => {
   const user = getCurrentUser();
   return user ? `${key}_${user}` : key;

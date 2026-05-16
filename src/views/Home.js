@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {
-  getCurrentUser,
-  getUserData,
-  saveUserData,
-} from "../services/storageService";
+import Typography from "@mui/material/Typography";
+import { getCurrentUser, getUserData, saveUserData } from "../services/storageService";
+import CustomAppBar from "../components/AppBar";
 import "./Home.css";
 
 export default function Home() {
@@ -93,6 +88,12 @@ export default function Home() {
     navigate("/formulario", { state: { type, registroData } });
   };
 
+  const totalRegistros = historico.length;
+  const ultimoRegistro = historico[0];
+  const ultimoRegistroData = ultimoRegistro?.registroData
+    ? new Date(ultimoRegistro.registroData).toLocaleString()
+    : null;
+
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (!currentUser) {
@@ -114,118 +115,131 @@ export default function Home() {
   }, [navigate]);
 
   return (
-    <div className="home-container" style={{ backgroundColor: "#f4f6f8" }}>
-      <AppBar position="static" sx={{ bgcolor: "#2ecc71" }}>
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1, color: "#ffffff" }}>
-            Informações do Bebê
-          </Typography>
-          <Link to="/settings" style={{ textDecoration: "none" }}>
-            <Button sx={{ color: "#ffffff", "&:hover": { color: "#dff0d8" } }}>
-              Configurações
-            </Button>
-          </Link>
-        </Toolbar>
-      </AppBar>
+    <div className="home-container">
+      <div className="home-wrapper">
+        <CustomAppBar title="Informações do Bebê" />
 
-      <div className="informacoes-bebe" style={{ padding: "20px" }}>
-        <h3>Informações do Bebê</h3>
-        <p>
-          <strong>Nome:</strong> {informacoesBebe.nome}
-        </p>
-        <p>
-          <strong>Peso:</strong> {informacoesBebe.peso} kg
-        </p>
-        <p>
-          <strong>Tamanho:</strong> {informacoesBebe.tamanho} cm
-        </p>
-      </div>
+        <div className="hero-card">
+          <h3>Bem-vindo ao acompanhamento do bebê</h3>
+          <p>
+            Veja a última atividade e monitore os registros de fralda, sono e amamentação.
+          </p>
+        </div>
 
-      <div
-        className="add-button"
-        style={{ padding: "16px", textAlign: "center" }}
-      >
-        <Button
-          component={Link}
-          to="/formulario"
-          variant="contained"
-          sx={{
-            bgcolor: "#2ecc71",
-            color: "#ffffff",
-            fontWeight: "bold",
-            padding: "12px 24px",
-            "&:hover": { bgcolor: "#27ae60" },
-          }}
-        >
-          Adicionar Registro
-        </Button>
-      </div>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-label">Registros</span>
+            <strong>{totalRegistros}</strong>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Último registro</span>
+            <strong>{ultimoRegistro?.type || "Nenhum"}</strong>
+            {ultimoRegistroData && <p>{ultimoRegistroData}</p>}
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Nome do bebê</span>
+            <strong>{informacoesBebe.nome || "Não informado"}</strong>
+          </div>
+        </div>
 
-      <div className="history-section" style={{ padding: "20px" }}>
-        <h3>Histórico de Registros</h3>
-        {historico.map((item, index) => (
-          <div
-            key={index}
-            className="history-card"
-            style={{
-              marginBottom: "20px",
-              padding: "15px",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              backgroundColor: "#ffffff",
+        <div className="info-grid">
+          <div className="info-box">
+            <p>
+              <strong>Peso:</strong> {informacoesBebe.peso ? `${informacoesBebe.peso} kg` : "Não informado"}
+            </p>
+          </div>
+          <div className="info-box">
+            <p>
+              <strong>Tamanho:</strong> {informacoesBebe.tamanho ? `${informacoesBebe.tamanho} cm` : "Não informado"}
+            </p>
+          </div>
+        </div>
+
+        <div className="add-section">
+          <Button
+            component={Link}
+            to="/formulario"
+            variant="contained"
+            sx={{
+              bgcolor: "#2ecc71",
+              color: "#ffffff",
+              fontWeight: "bold",
+              padding: "12px 26px",
+              fontSize: "1rem",
+              borderRadius: "999px",
+              "&:hover": { bgcolor: "#27ae60" },
             }}
           >
-            <p>
-              <strong>Tipo:</strong> {item.type}
-            </p>
-            {item.type === "Fralda" && (
-              <p>
-                <strong>Estado:</strong> {item.estado}
-              </p>
-            )}
-            {item.type === "Sono" && (
-              <>
-                <p>
-                  <strong>Horário de Início:</strong> {item.horarioInicio}
-                </p>
-                <p>
-                  <strong>Horário de Fim:</strong> {item.horarioFim}
-                </p>
-              </>
-            )}
-            {item.type === "Amamentação" && (
-              <>
-                <p>
-                  <strong>Horário de Início:</strong> {item.horarioInicio}
-                </p>
-                <p>
-                  <strong>Horário de Fim:</strong> {item.horarioFim}
-                </p>
-                <p>
-                  <strong>Lado:</strong> {item.lado}
-                </p>
-              </>
-            )}
-            <p>
-              <strong>Observação:</strong> {item.observacao}
-            </p>
+            Adicionar Registro
+          </Button>
+        </div>
 
-            <div className="buttons">
-              <Button
-                onClick={() => editarRegistro(item.type, item.registroData)}
-                sx={{ color: "#2ecc71" }}
-              >
-                Editar
-              </Button>
-              <Button
-                onClick={() => excluirRegistro(item.type, item.registroData)}
-                sx={{ color: "#e74c3c" }}
-              >
-                Excluir
-              </Button>
-            </div>
+        <div className="history-section">
+          <h3 className="section-title">Histórico de Registros</h3>
+          <div className="history-grid">
+            {historico.length === 0 ? (
+              <div className="empty-state">
+                <p>Nenhum registro encontrado ainda. Adicione um registro para começar.</p>
+              </div>
+            ) : (
+              historico.map((item, index) => (
+                <div key={index} className="history-card">
+                  <div className="history-header">
+                    <span className="history-type">{item.type}</span>
+                    {item.registroData && (
+                      <small>{new Date(item.registroData).toLocaleString()}</small>
+                    )}
+                  </div>
+                  {item.type === "Fralda" && (
+                    <p>
+                      <strong>Estado:</strong> {item.estado}
+                    </p>
+                  )}
+                  {item.type === "Sono" && (
+                    <>
+                      <p>
+                        <strong>Horário de Início:</strong> {item.horarioInicio}
+                      </p>
+                      <p>
+                        <strong>Horário de Fim:</strong> {item.horarioFim}
+                      </p>
+                    </>
+                  )}
+                  {item.type === "Amamentação" && (
+                    <>
+                      <p>
+                        <strong>Horário de Início:</strong> {item.horarioInicio}
+                      </p>
+                      <p>
+                        <strong>Horário de Fim:</strong> {item.horarioFim}
+                      </p>
+                      <p>
+                        <strong>Lado:</strong> {item.lado}
+                      </p>
+                    </>
+                  )}
+                  <p>
+                    <strong>Observação:</strong> {item.observacao || "Nenhuma"}
+                  </p>
+                  <div className="history-actions">
+                    <Button
+                      onClick={() => editarRegistro(item.type, item.registroData)}
+                      sx={{ color: "#2ecc71" }}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      onClick={() => excluirRegistro(item.type, item.registroData)}
+                      sx={{ color: "#e74c3c" }}
+                    >
+                      Excluir
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
