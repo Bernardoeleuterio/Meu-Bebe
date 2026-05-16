@@ -8,12 +8,18 @@ import {
   Typography,
   Box,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
+import "./Login.css";
 
 export default function Login() {
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,10 +39,14 @@ export default function Login() {
 
     if (userExists) {
       localStorage.setItem("loggedUser", nome);
-      alert("Login bem-sucedido!");
-      navigate("/home");
+      setSnackbarMessage("Login bem-sucedido!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      setTimeout(() => navigate("/home"), 1500);
     } else {
-      alert("Usuário não encontrado ou senha incorreta.");
+      setSnackbarMessage("Usuário não encontrado ou senha incorreta.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -46,36 +56,25 @@ export default function Login() {
 
   return (
     <Container className="auth-container" maxWidth="sm">
-      <Paper className="auth-card" elevation={5} sx={{
-          width: "100%",
-          p: { xs: 4, sm: 5 },
-          borderRadius: 4,
-          bgcolor: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
+      <Paper className="auth-card" elevation={5}>
         <CustomAppBar title="Entrar" showSettings={false} showBack={false} />
-        <Box sx={{ textAlign: "center", mb: 3 }}>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{ color: "#0f172a", fontWeight: 700 }}
-          >
+        <Box className="auth-header">
+          <Typography variant="h4">
             Bem-vindo de volta
           </Typography>
-          <Typography variant="body1" sx={{ color: "#475569" }}>
+          <Typography variant="body1">
             Acesse suas informações do bebê de forma rápida e segura.
           </Typography>
         </Box>
 
-        <Box component="form" onSubmit={handleLogin} sx={{ display: "grid", gap: 2 }}>
+        <Box component="form" onSubmit={handleLogin} className="auth-form">
           <TextField
             fullWidth
             label="Nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             variant="outlined"
-            sx={{ bgcolor: "#f8fafc" }}
+            className="auth-textfield"
           />
           <TextField
             fullWidth
@@ -84,44 +83,43 @@ export default function Login() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             variant="outlined"
-            sx={{ bgcolor: "#f8fafc" }}
+            className="auth-textfield"
           />
 
           <Button
             type="submit"
             variant="contained"
             size="large"
-            sx={{
-              bgcolor: "#22c55e",
-              color: "#ffffff",
-              fontWeight: 700,
-              py: 1.5,
-              borderRadius: 3,
-              boxShadow: "0 12px 24px rgba(34, 197, 94, 0.18)",
-              "&:hover": { bgcolor: "#16a34a" },
-            }}
+            className="auth-btn-primary"
           >
             Entrar
           </Button>
 
           <Button
             type="button"
-            variant="outlined"
+            variant="contained"
             onClick={redirectToRegister}
             size="large"
-            sx={{
-              color: "#0f766e",
-              borderColor: "#0f766e",
-              py: 1.5,
-              borderRadius: 3,
-              fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(15, 118, 110, 0.08)" },
-            }}
+            className="auth-btn-secondary"
           >
             Criar Conta
           </Button>
         </Box>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          className="snackbar-alert"
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

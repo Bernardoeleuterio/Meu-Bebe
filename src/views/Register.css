@@ -1,0 +1,84 @@
+.register-container {
+  max-width: 600px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.register-card {
+  width: 100%;
+  padding: 40px;
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .register-card {
+    padding: 32px;
+  }
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.register-header h4 {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 1.875rem;
+  margin: 0;
+}
+
+.register-header p {
+  color: #475569;
+  margin: 8px 0 0 0;
+  font-size: 1rem;
+}
+
+.register-form {
+  display: grid;
+  gap: 16px;
+}
+
+.register-textfield {
+  background-color: #f8fafc;
+}
+
+.register-btn-submit {
+  background-color: #22c55e;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 12px 32px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.18);
+  transition: background-color 0.2s ease;
+}
+
+.register-btn-submit:hover {
+  background-color: #16a34a;
+}
+
+.register-btn-back {
+  background-color: #16a34a;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 12px 32px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.register-btn-back:hover {
+  background-color: #15803d;
+}
+
+.snackbar-alert {
+  width: 100%;
+}

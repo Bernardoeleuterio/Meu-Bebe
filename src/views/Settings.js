@@ -12,6 +12,8 @@ import {
   Typography,
   Box,
   Modal,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
 import "./Settings.css";
@@ -25,6 +27,8 @@ export default function Settings() {
     comprimentoBebe: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     const currentUser = getCurrentUser();
@@ -45,74 +49,57 @@ export default function Settings() {
 
   const handleSave = () => {
     saveUserData("informacoesBebe", babyData);
-    alert("Configurações salvas com sucesso!");
+    setSnackbarMessage("Configurações salvas com sucesso!");
+    setSnackbarOpen(true);
     setIsEditing(false);
-    navigate("/home");
+    setTimeout(() => navigate("/home"), 1500);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("loggedUser");
-    alert("Logout bem-sucedido.");
-    navigate("/");
+    setSnackbarMessage("Logout bem-sucedido.");
+    setSnackbarOpen(true);
+    setTimeout(() => navigate("/"), 1500);
   };
 
   const handleBack = () => navigate(-1);
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        px: 2,
-        py: 6,
-      }}
-    >
-      <Box className="settings-card" sx={{ width: "100%" }}>
-        <CustomAppBar title="Configurações" showSettings={false} showBack={true} />
+    <Container maxWidth="sm" className="settings-container">
+      <Box className="settings-card">
+        <CustomAppBar title="Configurações" showSettings={false} />
 
-        <Box
-          className="settings-hero"
-          sx={{
-            p: 3,
-            borderRadius: 3,
-            background: "linear-gradient(135deg, #22c55e, #0f766e)",
-            color: "#fff",
-            mb: 4,
-          }}
-        >
-          <Typography variant="h4" align="center" sx={{ fontWeight: 700 }}>
+        <Box className="settings-hero">
+          <Typography variant="h4">
             Configurações do Bebê
           </Typography>
-          <Typography variant="body1" align="center" sx={{ mt: 1, color: "rgba(255,255,255,0.9)" }}>
+          <Typography variant="body1">
             Atualize os dados do bebê e mantenha o app personalizado para você.
           </Typography>
         </Box>
 
-        <Box className="settings-info" sx={{ mb: 3 }}>
+        <Box className="settings-info">
           <Box className="settings-stat">
-            <Typography variant="subtitle2" color="#64748b">
+            <Typography variant="subtitle2">
               Nome do bebê
             </Typography>
-            <Typography variant="h6" sx={{ color: "#0f172a" }}>
+            <Typography variant="h6">
               {babyData.nomeBebe || "Não informado"}
             </Typography>
           </Box>
           <Box className="settings-stat">
-            <Typography variant="subtitle2" color="#64748b">
+            <Typography variant="subtitle2">
               Peso
             </Typography>
-            <Typography variant="h6" sx={{ color: "#0f172a" }}>
+            <Typography variant="h6">
               {babyData.pesoBebe ? `${babyData.pesoBebe} kg` : "Não informado"}
             </Typography>
           </Box>
           <Box className="settings-stat">
-            <Typography variant="subtitle2" color="#64748b">
+            <Typography variant="subtitle2">
               Comprimento
             </Typography>
-            <Typography variant="h6" sx={{ color: "#0f172a" }}>
+            <Typography variant="h6">
               {babyData.comprimentoBebe ? `${babyData.comprimentoBebe} cm` : "Não informado"}
             </Typography>
           </Box>
@@ -121,45 +108,21 @@ export default function Settings() {
         <Box className="settings-actions">
           <Button
             variant="contained"
-            sx={{
-              bgcolor: "#16a34a",
-              color: "#ffffff",
-              fontWeight: 700,
-              py: 1.4,
-              borderRadius: 3,
-              minWidth: 140,
-              "&:hover": { bgcolor: "#15803d" },
-            }}
+            className="settings-btn-edit"
             onClick={handleEdit}
           >
             Editar
           </Button>
           <Button
-            variant="outlined"
-            sx={{
-              color: "#ef4444",
-              borderColor: "#ef4444",
-              py: 1.4,
-              borderRadius: 3,
-              minWidth: 140,
-              fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(239, 68, 68, 0.08)" },
-            }}
+            variant="contained"
+            className="settings-btn-logout"
             onClick={handleLogout}
           >
             Sair
           </Button>
           <Button
-            variant="outlined"
-            sx={{
-              color: "#0f172a",
-              borderColor: "#0f172a",
-              py: 1.4,
-              borderRadius: 3,
-              minWidth: 140,
-              fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(15, 23, 42, 0.08)" },
-            }}
+            variant="contained"
+            className="settings-btn-back"
             onClick={handleBack}
           >
             Voltar
@@ -167,30 +130,11 @@ export default function Settings() {
         </Box>
 
         <Modal open={isEditing} onClose={() => setIsEditing(false)}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 3,
-            }}
-          >
-            <Typography variant="h6" align="center" gutterBottom>
+          <Box className="settings-modal-content">
+            <Typography variant="h6" className="settings-modal-title">
               Editar Informações
             </Typography>
-            <Box
-              component="form"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
+            <Box className="settings-form">
               <TextField
                 fullWidth
                 label="Nome do Bebê"
@@ -217,23 +161,17 @@ export default function Settings() {
                   setBabyData({ ...babyData, comprimentoBebe: e.target.value })
                 }
               />
-              <Box
-                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-              >
+              <Box className="settings-form-actions">
                 <Button
                   variant="contained"
-                  sx={{ bgcolor: "#388e3c", "&:hover": { bgcolor: "#2e7d32" } }}
+                  className="settings-btn-save"
                   onClick={handleSave}
                 >
                   Salvar
                 </Button>
                 <Button
                   variant="outlined"
-                  sx={{
-                    color: "#f44336",
-                    borderColor: "#f44336",
-                    "&:hover": { bgcolor: "#f44336", color: "#fff" },
-                  }}
+                  className="settings-btn-cancel"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancelar
@@ -242,6 +180,20 @@ export default function Settings() {
             </Box>
           </Box>
         </Modal>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity="success"
+            className="snackbar-alert"
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );

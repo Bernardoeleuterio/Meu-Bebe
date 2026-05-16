@@ -88,6 +88,22 @@
   margin: 30px 0;
 }
 
+.home-add-button {
+  background-color: #2ecc71;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 12px 26px;
+  font-size: 1rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.home-add-button:hover {
+  background-color: #27ae60;
+}
+
 .history-section {
   margin-top: 8px;
 }
@@ -123,10 +139,33 @@
   flex-wrap: wrap;
 }
 
-.history-actions button {
+.history-btn {
   font-weight: 700;
   text-transform: none;
   min-width: 92px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.history-btn-edit {
+  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.08);
+}
+
+.history-btn-edit:hover {
+  background: rgba(46, 204, 113, 0.16);
+}
+
+.history-btn-delete {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.08);
+}
+
+.history-btn-delete:hover {
+  background: rgba(231, 76, 60, 0.16);
 }
 
 .history-header {
@@ -186,5 +225,9 @@
 
   .history-card {
     padding: 18px;
+  }
+
+  .home-add-button {
+    width: 100%;
   }
 }

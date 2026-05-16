@@ -1,7 +1,11 @@
 .formulario-page {
-  margin: 0 auto;
-  max-width: 560px;
-  padding: 28px 16px 40px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  padding-bottom: 32px;
+  padding-top: 32px;
 }
 
 .formulario-card {
@@ -9,26 +13,37 @@
   border-radius: 24px;
   padding: 28px;
   box-shadow: 0 18px 38px rgba(15, 23, 42, 0.10);
-}
-
-.formulario-card h4 {
-  margin-bottom: 24px;
+  width: 100%;
 }
 
 .formulario-hero {
   text-align: center;
   padding: 18px 0 8px;
+  margin-bottom: 24px;
 }
 
-.formulario-card {
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.10);
+.formulario-hero h5 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0 0 8px 0;
 }
 
-.formulario-card h4 {
-  margin-bottom: 12px;
+.formulario-hero p {
+  color: #475569;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.formulario-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.formulario-select,
+.formulario-textfield {
+  background-color: #f8fafc;
 }
 
 .formulario-row {
@@ -45,9 +60,45 @@
   margin-top: 8px;
 }
 
+.formulario-btn-save {
+  background-color: #22c55e;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 32px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.formulario-btn-save:hover {
+  background-color: #16a34a;
+}
+
+.formulario-btn-back {
+  background-color: #16a34a;
+  color: #ffffff;
+  padding: 12px 32px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.formulario-btn-back:hover {
+  background-color: #15803d;
+}
+
+.snackbar-alert {
+  width: 100%;
+}
+
 @media (max-width: 760px) {
   .formulario-page {
-    padding: 24px 14px 30px;
+    padding: 16px;
   }
 
   .formulario-card {
@@ -56,5 +107,10 @@
 
   .formulario-row {
     grid-template-columns: 1fr;
+  }
+
+  .formulario-button-group {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

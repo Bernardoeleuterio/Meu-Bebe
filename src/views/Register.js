@@ -8,12 +8,17 @@ import {
   Typography,
   Box,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
+import "./Register.css";
 
 export default function Register() {
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -36,8 +41,9 @@ export default function Register() {
     saveGlobalData("users", [...users, newUser]);
     setCurrentUser(nome);
 
-    alert("Conta criada com sucesso!");
-    navigate("/home");
+    setSnackbarMessage("Conta criada com sucesso!");
+    setSnackbarOpen(true);
+    setTimeout(() => navigate("/home"), 1500);
   };
 
   const redirectToLogin = () => {
@@ -45,37 +51,26 @@ export default function Register() {
   };
 
   return (
-    <Container className="auth-container" maxWidth="sm">
-      <Paper className="auth-card" elevation={5} sx={{
-          width: "100%",
-          p: { xs: 4, sm: 5 },
-          borderRadius: 4,
-          bgcolor: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
+    <Container className="register-container" maxWidth="sm">
+      <Paper className="register-card" elevation={5}>
         <CustomAppBar title="Criar Conta" showSettings={false} showBack={false} />
-        <Box sx={{ textAlign: "center", mb: 3 }}>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{ color: "#0f172a", fontWeight: 700 }}
-          >
+        <Box className="register-header">
+          <Typography variant="h4">
             Crie sua conta
           </Typography>
-          <Typography variant="body1" sx={{ color: "#475569" }}>
+          <Typography variant="body1">
             Registre-se para acompanhar o desenvolvimento do seu bebê.
           </Typography>
         </Box>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: "grid", gap: 2 }}>
+        <Box component="form" onSubmit={handleSubmit} className="register-form">
           <TextField
             fullWidth
             label="Nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             variant="outlined"
-            sx={{ bgcolor: "#f8fafc" }}
+            className="register-textfield"
           />
           <TextField
             fullWidth
@@ -84,44 +79,43 @@ export default function Register() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             variant="outlined"
-            sx={{ bgcolor: "#f8fafc" }}
+            className="register-textfield"
           />
 
           <Button
             type="submit"
             variant="contained"
             size="large"
-            sx={{
-              bgcolor: "#22c55e",
-              color: "#ffffff",
-              fontWeight: 700,
-              py: 1.5,
-              borderRadius: 3,
-              boxShadow: "0 12px 24px rgba(34, 197, 94, 0.18)",
-              "&:hover": { bgcolor: "#16a34a" },
-            }}
+            className="register-btn-submit"
           >
             Registrar
           </Button>
 
           <Button
             type="button"
-            variant="outlined"
+            variant="contained"
             onClick={redirectToLogin}
             size="large"
-            sx={{
-              color: "#0f766e",
-              borderColor: "#0f766e",
-              py: 1.5,
-              borderRadius: 3,
-              fontWeight: 700,
-              "&:hover": { bgcolor: "rgba(15, 118, 110, 0.08)" },
-            }}
+            className="register-btn-back"
           >
             Voltar para Login
           </Button>
         </Box>
       </Paper>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="success"
+          className="snackbar-alert"
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

@@ -160,15 +160,7 @@ export default function Home() {
             component={Link}
             to="/formulario"
             variant="contained"
-            sx={{
-              bgcolor: "#2ecc71",
-              color: "#ffffff",
-              fontWeight: "bold",
-              padding: "12px 26px",
-              fontSize: "1rem",
-              borderRadius: "999px",
-              "&:hover": { bgcolor: "#27ae60" },
-            }}
+            className="home-add-button"
           >
             Adicionar Registro
           </Button>
@@ -224,13 +216,13 @@ export default function Home() {
                   <div className="history-actions">
                     <Button
                       onClick={() => editarRegistro(item.type, item.registroData)}
-                      sx={{ color: "#2ecc71" }}
+                      className="history-btn history-btn-edit"
                     >
                       Editar
                     </Button>
                     <Button
                       onClick={() => excluirRegistro(item.type, item.registroData)}
-                      sx={{ color: "#e74c3c" }}
+                      className="history-btn history-btn-delete"
                     >
                       Excluir
                     </Button>
