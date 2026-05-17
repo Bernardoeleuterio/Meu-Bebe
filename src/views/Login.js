@@ -12,7 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
-import "./Login.css";
+import "../styles/Login.css";
 
 export default function Login() {
   const [nome, setNome] = useState("");

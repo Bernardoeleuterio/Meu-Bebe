@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { getCurrentUser, getUserData, saveUserData } from "../services/storageService";
 import CustomAppBar from "../components/AppBar";
-import "./Home.css";
+import "../styles/Home.css";
 
 export default function Home() {
   const [historico, setHistorico] = useState([]);

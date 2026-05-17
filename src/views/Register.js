@@ -12,7 +12,7 @@ import {
   Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
-import "./Register.css";
+import "../styles/Register.css";
 
 export default function Register() {
   const [nome, setNome] = useState("");

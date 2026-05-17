@@ -17,7 +17,7 @@ import {
   saveUserData,
 } from "../services/storageService";
 import CustomAppBar from "../components/AppBar";
-import "./Formulario.css";
+import "../styles/Formulario.css";
 
 export default function FormularioRegistro() {
   const [tipo, setTipo] = useState("Fralda");

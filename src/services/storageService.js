@@ -15,10 +15,6 @@ export const setCurrentUser = (user) => {
   localStorage.setItem("loggedUser", user);
 };
 
-export const clearCurrentUser = () => {
-  localStorage.removeItem("loggedUser");
-};
-
 export const getUserKey = (key) => {
   const user = getCurrentUser();
   return user ? `${key}_${user}` : key;
@@ -33,8 +29,4 @@ export const getUserData = (key) => {
   const storageKey = getUserKey(key);
   const raw = localStorage.getItem(storageKey);
   return raw ? JSON.parse(raw) : null;
-};
-
-export const clearData = () => {
-  localStorage.clear();
 };

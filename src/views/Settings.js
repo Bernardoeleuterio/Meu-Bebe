@@ -16,7 +16,7 @@ import {
   Alert,
 } from "@mui/material";
 import CustomAppBar from "../components/AppBar";
-import "./Settings.css";
+import "../styles/Settings.css";
 
 export default function Settings() {
   const navigate = useNavigate();

@@ -1,6 +1,5 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./AppBar.css";
+import "../styles/AppBar.css";
 
 const AppBar = ({ title, showSettings = true, showBack = false, onBack }) => {
   const navigate = useNavigate();
