@@ -56,6 +56,4 @@ http://localhost:3000
 3. Visualize o histórico e edite registros quando necessário.
 4. Acompanhe informações do bebê, como nome, peso e tamanho.
 
-## Para descrição do GitHub
 
-App React para acompanhamento de cuidados do bebê: login, cadastro, histórico de fraldas, sono e amamentação com dados salvos no navegador.
