@@ -56,4 +56,8 @@ http://localhost:3000
 3. Visualize o histórico e edite registros quando necessário.
 4. Acompanhe informações do bebê, como nome, peso e tamanho.
 
+## Site
+
+- https://meu-bebe-snowy.vercel.app/
+  
 
